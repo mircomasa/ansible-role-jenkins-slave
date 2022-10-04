@@ -17,18 +17,32 @@ slave_linux_host: "{{ ansible_host }}"
 slave_linux_ssh_port: 22
 slave_linux_home: /opt/jenkins
 slave_linux_jenkins_cred_id: ci_slave
-slave_linux_jenkins_username: user
-slave_linux_jenkins_password: password
+slave_linux_jenkins_username: jenkins
+slave_linux_jenkins_password: ""
 slave_linux_jenkins_public_key: ""
-slave_linux_user_group: user
+slave_linux_user_group: jenkins
 slave_linux_labels:
   - linux
 slave_linux_selinux_ports: "{{ master_port }},49187,\
 {{ slave_linux_ssh_port }}"
 
+# jenkins linux slave
+slave_darwin_host: "{{ ansible_host }}"
+slave_darwin_ssh_port: 22
+slave_darwin_home: /opt/jenkins
+slave_darwin_jenkins_cred_id: ci_slave
+slave_darwin_jenkins_username: jenkins
+slave_darwin_jenkins_password: ""
+slave_darwin_jenkins_public_key: ""
+slave_darwin_user_group: jenkins
+slave_darwin_labels:
+  - darwin
+slave_darwin_selinux_ports: "{{ master_port }},49187,\
+{{ slave_darwin_ssh_port }}"
+
 # jenkins windows slave
 slave_windows_service: jenkins-slave
-slave_windows_workdir: C:/Jenkins_Slave
+slave_windows_workdir: 'C:/Jenkins_Slave'
 slave_windows_java_opts: ""
 slave_windows_labels:
   - windows

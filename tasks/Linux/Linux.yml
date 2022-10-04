@@ -1,4 +1,5 @@
 ---
+
 - name: Start and enable openssh server
   service:
     name: '{{ sshd_service_name }}'
@@ -8,21 +9,20 @@
 
 - name: Create a group for jenkins user
   group:
-    name: '{{ slave_linux_jenkins_username }}'
+    name: '{{ slave_linux_user_group }}'
     state: present
   become: true
 
 - name: Create jenkins user with root privileges
   user:
     name: '{{ slave_linux_jenkins_username }}'
-    group: '{{ slave_linux_jenkins_username }}'
+    group: '{{ slave_linux_user_group }}'
     password: >-
-      {{ slave_linux_jenkins_password
+      {{ slave_linux_jenkins_password | default('!')
         | password_hash('sha512', 65534 | random(seed=inventory_hostname)
         | string) }}
     update_password: always
     state: present
-    append: true
     createhome: true
   become: true
 

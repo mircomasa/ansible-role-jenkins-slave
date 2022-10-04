@@ -7,8 +7,9 @@
 - name: Download slave.jar from master
   win_get_url:
     url: '{{ master_url }}/jnlpJars/slave.jar'
-    dest: '{{ slave_windows_workdir }}/slave.jar'
+    dest: '{{ slave_windows_workdir }}/agent.jar'
     force: false
+    validate_certs: no
 
 - import_tasks: agent.yml
 

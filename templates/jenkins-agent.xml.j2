@@ -1,0 +1,10 @@
+<service>
+  <id>{{ slave_windows_service }}</id>
+  <name>Jenkins Windows Agent</name>
+  <description>This service runs the agent process connected to Jenkins ({{ master_url }}).</description>
+  <executable>java</executable>
+  <arguments>-jar c:\jenkins-agent\agent.jar -jnlpUrl {{ master_url }}/computer/{{ slave_agent_name }}/jenkins-agent.jnlp -secret {{ jenkins_slave_secret }} -workDir "{{ slave_windows_workdir }}"</arguments>
+  <log mode="roll" />
+  <onfailure action="restart" />
+</service>
+
