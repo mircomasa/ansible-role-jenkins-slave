@@ -1,4 +1,5 @@
 ---
+
 - name: Load variables based on OS family
   include_vars: '{{ item }}'
   with_first_found:
@@ -16,11 +17,15 @@
   until: status is success
   become: true
   when: (requirements | default([])) | length > 0
+  
+- name: Identified platform
+  debug:
+    msg: "System: {{ ansible_facts.system }}"
 
 - name: Choose platform based task
-  include_tasks: '{{ platform }}'
+  include_tasks: "{{ platform }}"
   with_first_found:
-    - '{{ ansible_facts.system }}/{{ ansible_facts.system }}.yml'
+    - "{{ ansible_facts.system }}/{{ ansible_facts.system }}.yml"
     - not-supported.yml
   loop_control:
     loop_var: platform

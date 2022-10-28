@@ -1,0 +1,27 @@
+---
+
+- name: Download slave.jar from master
+  get_url:
+    url: "{{ master_url }}/jnlpJars/slave.jar"
+    dest: "{{ slave_macos_home }}/agent.jar"
+    force: false
+    validate_certs: no
+    
+- name: Install slave jenkins agent
+  jenkins_script:
+    user: '{{ master_username }}'
+    password: '{{ master_password }}'
+    validate_certs: false
+    timeout: 120
+    url: '{{ master_url }}'
+    script: >-
+      {{ lookup('template', 'add_macos_slave_jnlp.groovy.j2') }}
+  register: jenkins_script
+      
+- name: Set jenkins slave secret
+  set_fact:
+    jenkins_slave_secret: "{{ jenkins_script.output | default('NA') }}"
+    
+- name: Print jenkins slave secret
+  debug:
+    var: jenkins_slave_secret

@@ -1,0 +1,11 @@
+---
+
+- name: Install slave jenkins agent
+  jenkins_script:
+    user: '{{ master_username }}'
+    password: '{{ master_password }}'
+    validate_certs: false
+    timeout: 120
+    url: '{{ master_url }}'
+    script: >-
+      {{ lookup('template', 'add_macos_slave_ssh.groovy.j2') }}

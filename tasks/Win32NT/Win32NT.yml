@@ -1,4 +1,5 @@
 ---
+
 - name: Create slave home directory
   win_file:
     path: '{{ slave_windows_workdir }}'

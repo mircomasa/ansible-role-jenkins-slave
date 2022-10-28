@@ -19,20 +19,20 @@ EnvironmentVariablesNodeProperty envPro = new EnvironmentVariablesNodeProperty(e
 
 Jenkins jenkins = Jenkins.getInstance()
 
-String nodeHostname = "{{ slave_darwin_host }}"
-String nodeCredentialID = "{{ slave_darwin_jenkins_cred_id }}"
-int nodePort = {{ slave_darwin_ssh_port }}
+String nodeHostname = "{{ slave_macos_host }}"
+String nodeCredentialID = "{{ slave_macos_jenkins_cred_id }}"
+int nodePort = {{ slave_macos_ssh_port }}
 SshHostKeyVerificationStrategy strategy = new NonVerifyingKeyVerificationStrategy()
 
 ComputerLauncher nodeLauncher = new SSHLauncher( nodeHostname, nodePort,
                  nodeCredentialID, null, null, null, null, 30, 20, 10, strategy )
 
 String nodeName = "{{ slave_agent_name }}"
-String nodeRemoteFS = "{{ slave_darwin_home }}"
+String nodeRemoteFS = "{{ slave_macos_home }}"
 
 Node node = new DumbSlave(nodeName, nodeRemoteFS, nodeLauncher)
 node.setNumExecutors({{ slave_executors_num }})
-node.setLabelString("{{ slave_darwin_labels | join(' ') }}")
+node.setLabelString("{{ slave_macos_labels | join(' ') }}")
 node.getNodeProperties().add(envPro)
 {% if slave_mode_exclusive %}
 node.setMode(Node.Mode.EXCLUSIVE)

@@ -1,0 +1,10 @@
+---
+
+- name: Deploy Jenkins agent service
+  template:
+    src: jenkins.daemon.plist.j2
+    dest: "{{ slave_macos_service_location }}/{{ slave_macos_service_name }}.plist"
+  notify: restart macos service
+  become: true
+
+

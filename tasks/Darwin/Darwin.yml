@@ -2,16 +2,16 @@
 
 - name: Create a group for jenkins user
   group:
-    name: '{{ slave_darwin_user_group }}'
+    name: '{{ slave_macos_user_group }}'
     state: present
   become: true
 
 - name: Create jenkins user with root privileges
   user:
-    name: '{{ slave_darwin_jenkins_username }}'
-    group: '{{ slave_darwin_user_group }}'
+    name: "{{ slave_macos_jenkins_username }}"
+    group: "{{ slave_macos_user_group }}"
     password: >-
-      {{ slave_darwin_jenkins_password | default('*************')
+      {{ slave_macos_jenkins_password | default('*************')
         | password_hash('sha512', 65534 | random(seed=inventory_hostname)
         | string) }}
     update_password: always
@@ -21,28 +21,24 @@
 
 - name: Set authorized key
   authorized_key:
-    user: '{{ slave_darwin_jenkins_username }}'
+    user: '{{ slave_macos_jenkins_username }}'
     state: present
-    key: '{{ slave_darwin_jenkins_public_key }}'
+    key: '{{ slave_macos_jenkins_public_key }}'
   become: true
-  when: slave_darwin_jenkins_public_key | trim
+  when: slave_macos_jenkins_public_key | trim
 
 - name: Create slave home directory
   file:
-    path: '{{ slave_darwin_home }}'
+    path: '{{ slave_macos_home }}'
     state: directory
-    owner: '{{ slave_darwin_jenkins_username }}'
-    group: '{{ slave_darwin_user_group }}'
+    owner: '{{ slave_macos_jenkins_username }}'
+    group: '{{ slave_macos_user_group }}'
     mode: 0775
   become: true
+  
+- import_tasks: "agent-{{ slave_agent_type }}.yml"
 
-- name: Install slave jenkins agent
-  jenkins_script:
-    user: '{{ master_username }}'
-    password: '{{ master_password }}'
-    validate_certs: false
-    timeout: 120
-    url: '{{ master_url }}'
-    script: >-
-      {{ lookup('template', 'add_darwin_slave.groovy.j2') }}
+- import_tasks: "service-{{ slave_agent_type }}.yml"
+
+
 

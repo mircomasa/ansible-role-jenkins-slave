@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>{{ slave_macos_service_name }}</string>
+		<key>WorkingDirectory</key>
+		<string>{{ slave_macos_home }}</string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>sudo</string>
+            <string>java</string>
+            <string>-jar</string>
+            <string>agent.jar</string>
+            <string>-jnlpUrl</string>
+            <string>{{ (master_url + '/computer/' + slave_agent_name + '/jenkins-agent.jnlp') }}</string>
+            <string>-secret</string>
+            <string>{{ jenkins_slave_secret }}</string>
+            <string>-workDir</string>
+            <string>{{ slave_macos_home }}</string>
+            <string>-noCertificateCheck</string>
+        </array>
+        <key>KeepAlive</key>
+        <true/>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>StandardErrorPath</key>
+        <string>{{ slave_macos_home }}/jenkins-slave.err</string>
+        <key>StandardOutPath</key>
+        <string>{{ slave_macos_home }}/jenkins-slave.out</string>
+</dict>
+</plist>

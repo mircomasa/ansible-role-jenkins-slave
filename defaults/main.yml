@@ -11,6 +11,7 @@ slave_agent_name: agent
 slave_executors_num: 1
 slave_environments: {}
 slave_mode_exclusive: false
+slave_agent_type: jnlp # options: jnlp, ssh
 
 # jenkins linux slave
 slave_linux_host: "{{ ansible_host }}"
@@ -26,19 +27,20 @@ slave_linux_labels:
 slave_linux_selinux_ports: "{{ master_port }},49187,\
 {{ slave_linux_ssh_port }}"
 
-# jenkins linux slave
-slave_darwin_host: "{{ ansible_host }}"
-slave_darwin_ssh_port: 22
-slave_darwin_home: /opt/jenkins
-slave_darwin_jenkins_cred_id: ci_slave
-slave_darwin_jenkins_username: jenkins
-slave_darwin_jenkins_password: ""
-slave_darwin_jenkins_public_key: ""
-slave_darwin_user_group: jenkins
-slave_darwin_labels:
-  - darwin
-slave_darwin_selinux_ports: "{{ master_port }},49187,\
-{{ slave_darwin_ssh_port }}"
+# jenkins macos slave
+slave_macos_host: "{{ ansible_host }}"
+slave_macos_ssh_port: 22
+slave_macos_home: /opt/jenkins-agent
+slave_macos_jenkins_cred_id: ci_slave
+slave_macos_jenkins_username: jenkins
+slave_macos_jenkins_password: ""
+slave_macos_jenkins_public_key: ""
+slave_macos_user_group: jenkins
+slave_macos_labels: []
+slave_macos_selinux_ports: "{{ master_port }},49187,\
+              {{ slave_macos_ssh_port }}"
+slave_macos_service_location: /Library/LaunchDaemons
+slave_macos_service_name: jenkins-agent.daemon
 
 # jenkins windows slave
 slave_windows_service: jenkins-slave
@@ -46,5 +48,6 @@ slave_windows_workdir: 'C:/Jenkins_Slave'
 slave_windows_java_opts: ""
 slave_windows_labels:
   - windows
+  - playwrightwindows
 slave_windows_service_user: LocalSystem
 slave_windows_service_password:

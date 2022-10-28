@@ -1,1 +1,15 @@
 ---
+
+- name: restart windows service
+  win_service:
+    name: '{{ slave_windows_service }}'
+    state: restarted
+    username: '{{ slave_windows_service_user }}'
+    password: '{{ slave_windows_service_password | default(omit) }}'
+
+- name: restart macos service
+  community.general.launchd:
+    enabled: yes
+    name: "{{ slave_macos_service_name }}"
+    state: restarted
+  become: true

@@ -10,11 +10,13 @@
   ansible.windows.win_template:
     src: jenkins-agent.xml.j2
     dest: '{{ slave_windows_workdir }}\jenkins-agent.xml'
+  notify: restart windows service
     
 - name: Copy CA
   ansible.windows.win_copy:
     src: 'etc/ssl/certs-tinnaboo/CA/cmeetingitaCA.crt'
     dest: '{{ slave_windows_workdir }}\'
+  notify: restart windows service
     
 - name: Import CA certificate
   ansible.windows.win_shell: 'keytool.exe -importcert -file .\cmeetingitaCA.crt -cacerts -keypass changeit -storepass changeit -noprompt -alias cefrielCA'
@@ -22,6 +24,7 @@
     chdir: '{{ slave_windows_workdir }}'
   register: pv_ret
   failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Certificate not imported, alias <cefrielCA> already exists")
+  notify: restart windows service
     
 - name: Install service
   ansible.windows.win_shell: '{{ slave_windows_workdir }}\jenkins-agent.exe install'
@@ -29,10 +32,6 @@
     chdir: '{{ slave_windows_workdir }}'
   register: pv_ret
   failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Failed to install the service. The specified service already exists")
+  notify: restart windows service
 
-- name: Start the service
-  win_service:
-    name: '{{ slave_windows_service }}'
-    state: started
-    username: '{{ slave_windows_service_user }}'
-    password: '{{ slave_windows_service_password | default(omit) }}'
+
