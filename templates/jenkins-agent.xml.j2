@@ -6,5 +6,8 @@
   <arguments>-jar c:\jenkins-agent\agent.jar -jnlpUrl {{ (master_url + '/computer/' + slave_agent_name + '/jenkins-agent.jnlp') }} -secret {{ jenkins_slave_secret }} -workDir "{{ slave_windows_workdir }}"</arguments>
   <log mode="roll" />
   <onfailure action="restart" />
+  <serviceaccount>
+    <username>LocalService</username>
+  </serviceaccount>
 </service>
 

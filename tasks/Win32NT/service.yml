@@ -23,7 +23,7 @@
   args:
     chdir: '{{ slave_windows_workdir }}'
   register: pv_ret
-  failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Certificate not imported, alias <cefrielCA> already exists")
+  failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Certificate not imported, alias <cefrielCA> already exists") and pv_ret.stdout is not search("Impossibile importare il certificato, l'alias <cefrielCA>")
   notify: restart windows service
     
 - name: Install service
@@ -31,7 +31,7 @@
   args:
     chdir: '{{ slave_windows_workdir }}'
   register: pv_ret
-  failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Failed to install the service. The specified service already exists")
+  failed_when: pv_ret.rc > 0 and pv_ret.stdout is not search("Failed to install the service. The specified service already exists") and pv_ret.stdout is not search("Failed to install the service. Servizio specificato già esistente")
   notify: restart windows service
 
 
